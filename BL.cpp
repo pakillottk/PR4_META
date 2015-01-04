@@ -59,17 +59,23 @@ unsigned long BL::ejecutar(unsigned* p) {
     bool mejora; //Flag para indicar si hemos encontrado mejora en el entorno
     bool finBusqueda = false; //Flag que indicará si la búsqueda debe terminar, por
                               //no encontrar mejoría en todo el entorno
-
+    unsigned vecino = 0; //Contador de vecinos
     while(evaluaciones < 10000) {
         //Generamos y evaluamos los vecinos
         for(unsigned i = 0; i < tam; i++) {
             if(!dlb[i]) { //Si la posición está marcada en dlb, ignoramos
                 mejora = false;
 
-                for(unsigned j = 0; j < tam; j++) {
+                for(unsigned j = 0; j < tam; j++) {                   
                     if(i==j)
                         continue;
-
+                    
+                    vecino++;
+                    if(vecino == 400) {
+                        finBusqueda = true;
+                        break;
+                    }
+                    
                     if(mejoraCambio(solucion, i, j)) { //Si el vecino mejora, actualizamos
                         if(Principal::debug)
                             std::cout << "Intercambio " << i << " a " << j

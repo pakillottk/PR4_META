@@ -1,15 +1,18 @@
 
 #include "AGG.h"
 
-AGG::AGG(const string& rutaFichero, bool usarPmx, float _pc, float _pm, unsigned _tam_pob ):
+AGG::AGG(const string& rutaFichero, float _pOpt, bool _mejor, bool usarPmx, float _pc, float _pm, unsigned _tam_pob ):
 AG(rutaFichero, _tam_pob)
 {
     pmx = usarPmx;
     n_cruces = _pc * (tam_pob/2);
     n_mutac = tam * _pm;
+    bl = new BL(flujo, distancias, tam);
+    pOpt = _pOpt * 100;
+    mejor = _mejor;
 }
 
-AGG::~AGG(){}
+AGG::~AGG(){ delete bl; }
 
 vector<unsigned*> AGG::seleccion(vector<pair<unsigned*,unsigned long> >& pob) {
     vector<unsigned*> selec;
@@ -47,7 +50,54 @@ unsigned long AGG::ejecutar() {
     //Vector de hijos
     vector<pair<unsigned*, unsigned long> > hijos;
     
+    unsigned generacion = 0;
     while(evaluaciones < max_eval) {
+        //Optimizar cromosomas
+        unsigned r_opt;
+        
+        char* optimizados;
+        unsigned mejores = pob.size() * pOpt/100.0;
+        unsigned mejor_crom;
+        unsigned mejorCoste_opt;
+        
+        if(generacion % 10 == 0 && generacion > 0) {
+            if(mejor) {
+                //Aplicar a mejores             
+                optimizados = new char[pob.size()];
+                for(unsigned i = 0; i < pob.size(); i++) {
+                    optimizados[i] = 0;                   
+                }
+                
+                mejorCoste_opt = 999999999;
+                while(mejores > 0) {
+                   for(unsigned i = 0; i < pob.size(); i++) {
+                       if(optimizados[i]) continue;
+                       
+                       if(pob[i].second < mejorCoste_opt) {
+                           mejorCoste_opt = pob[i].second;
+                           mejor_crom = i;
+                       }
+                   }
+                   
+                   bl->ejecutar(pob[mejor_crom].first);
+                   optimizados[mejor_crom] = 1;
+                   mejores--;
+                }
+                
+                delete [] optimizados;
+                
+            } else {
+                //Aplicar con pOpt
+                for(unsigned i = 0; i < pob.size(); i++) {
+                    r_opt = rand() % 100;
+                    
+                    if(r_opt < pOpt) {
+                        bl->ejecutar(pob[i].first);
+                    }
+                }
+            }
+        }
+        
         //Generar padres
         padres = seleccion(pob);
         
@@ -139,7 +189,9 @@ unsigned long AGG::ejecutar() {
         
         //Reiniciar vectores
         padres.clear();
-        hijos.clear();        
+        hijos.clear();     
+        
+        generacion++;
     } 
     
     //Liberamos la memora

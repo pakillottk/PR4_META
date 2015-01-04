@@ -69,30 +69,25 @@ void Principal::elegirAlgoritmo() {
     
     do {
         cout << "Seleccione algoritmo: " << endl;
-        cout << "1.AGG-Pos" << endl
-             << "2.AGG-PMX" << endl
-             << "3.AGE-Pos" << endl
-             << "4.AGE-PMX" << endl << endl;        
+        cout << "1.AM-BASIC" << endl
+             << "2.AM-PROB" << endl
+             << "3.AM-MEJOR" << endl << endl;            
         cout << "Opcion: ";
         cin >> opcion;
         cout << endl;
-    } while (opcion < 1 || opcion > 4);    
+    } while (opcion < 1 || opcion > 3);    
     
     switch(opcion) {
         case 1:
-            tipo = AGG_POS;
+            tipo = AM_BASIC;
         break;
         
         case 2:
-            tipo = AGG_PMX;
+            tipo = AM_PROB;
         break;
             
         case 3:
-            tipo = AGE_POS;
-        break;
-        
-        case 4:
-            tipo = AGE_PMX;
+            tipo = AM_MEJOR;
         break;
     }    
 }
@@ -111,22 +106,19 @@ void Principal::construirAlgoritmo() {
     
     //Instanciación de la metaheurística
     
-    switch(tipo) {
-        case AGG_POS:
-            metaheuristica = new AGG("./DAT/" + fichero + ".dat");
+    switch(tipo) {        
+        case AM_BASIC:
+            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 1.0);
         break;
         
-        case AGG_PMX:
-            metaheuristica = new AGG("./DAT/" + fichero + ".dat", true);
+        case AM_PROB:
+            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 0.1);
         break;
         
-        case AGE_POS:
-            metaheuristica = new AGE("./DAT/" + fichero + ".dat");
-        break;
+        case AM_MEJOR:
+            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 0.1, true);
+        break;       
         
-        case AGE_PMX:
-            metaheuristica = new AGE("./DAT/" + fichero + ".dat", true);
-        break;
     }  
        
 }
@@ -175,21 +167,17 @@ void Principal::guardarResultados(unsigned long costeObtenido, unsigned tiempo) 
 
 string const Principal::tipo_str() {
     switch(tipo) {
-        case AGG_POS:
-            return "AGG-POS";
+        case AM_BASIC:
+            return "AM-BASIC";
         break;
         
-        case AGG_PMX:
-            return "AGG-PMX";
+        case AM_PROB:
+            return "AGGAM-PROB";
         break;
         
-        case AGE_POS:
-            return "AGE-POS";
-        break;
-        
-        case AGE_PMX:
-            return "AGE-PMX";
-        break;
+        case AM_MEJOR:
+            return "AM-MEJOR";
+        break;       
     }
 }
 

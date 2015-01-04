@@ -16,12 +16,11 @@
 #include "Timer.h"
 #include "Metaheuristica.h"
 #include "AG.h"
-#include "AGE.h"
 #include "AGG.h"
 
 using namespace std;
 
-enum Tipo_Algoritmo {AGG_POS, AGG_PMX, AGE_POS, AGE_PMX};
+enum Tipo_Algoritmo {AM_BASIC, AM_PROB, AM_MEJOR};
 //Enumeración que define los tres algoritmos empleados en la aplicación
 
 
