@@ -108,15 +108,15 @@ void Principal::construirAlgoritmo() {
     
     switch(tipo) {        
         case AM_BASIC:
-            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 1.0);
+            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 1.0, false, false, 0.7, 0.01, 10);
         break;
         
         case AM_PROB:
-            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 0.1);
+            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 0.1, false, false, 0.7, 0.01, 10);
         break;
         
         case AM_MEJOR:
-            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 0.1, true);
+            metaheuristica = new AGG("./DAT/" + fichero + ".dat", 0.1, true, false, 0.7, 0.01, 10);
         break;       
         
     }  
