@@ -172,7 +172,7 @@ string const Principal::tipo_str() {
         break;
         
         case AM_PROB:
-            return "AGGAM-PROB";
+            return "AM-PROB";
         break;
         
         case AM_MEJOR:

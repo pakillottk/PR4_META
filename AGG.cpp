@@ -160,26 +160,27 @@ unsigned long AGG::ejecutar() {
         if(pmx) {
             delete [] hijos[peorHijo].first;
             hijos[peorHijo].first = 0;
-        } else {
-            for(unsigned i = 0; i < hijos.size(); i++) {
-                if(!hijos[i].first)
-                    continue;
-                
-                if(pob[cur_p].first == solucion) {
-                    cur_p++;
-                } 
+        } 
+        
+        for(unsigned i = 0; i < hijos.size(); i++) {
+            if(!hijos[i].first)
+                continue;
 
-                delete [] pob[cur_p].first;
-                pob[cur_p].first = hijos[i].first;
-                pob[cur_p].second = hijos[i].second; 
+            if(pob[cur_p].first == solucion) {
                 cur_p++;
-                
-                if(hijos[i].second < mejorCoste_h) {
-                    mejorHijo = hijos[i].first;
-                    mejorCoste_h = hijos[i].second;
-                }
+            } 
+
+            delete [] pob[cur_p].first;
+            pob[cur_p].first = hijos[i].first;
+            pob[cur_p].second = hijos[i].second; 
+            cur_p++;
+
+            if(hijos[i].second < mejorCoste_h) {
+                mejorHijo = hijos[i].first;
+                mejorCoste_h = hijos[i].second;
             }
-        }       
+        }
+               
         
         //Actualizar mejor solución
         if(mejorCoste_h < mejorCoste) {
