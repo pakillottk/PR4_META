@@ -103,6 +103,7 @@ pair<unsigned*, unsigned*> AG::cruce_pmx(unsigned* p, unsigned* m) {
     }
     
     unsigned v;
+    bool repetidos = false;
     
     for(unsigned i = 0; i < t_subcadena-1; i++) {
         if(asignados_h1[p[i]]) {
@@ -111,7 +112,9 @@ pair<unsigned*, unsigned*> AG::cruce_pmx(unsigned* p, unsigned* m) {
             v = p[i];
         }
         
+        if(asignados_h1[v]){ repetidos = true; break; }
         h1[i] = v;
+        asignados_h1[v] = 1;
         
         if(asignados_h2[m[i]]) {
             v = precedente_h2[m[i]];
@@ -119,25 +122,38 @@ pair<unsigned*, unsigned*> AG::cruce_pmx(unsigned* p, unsigned* m) {
             v = m[i];
         }
         
+        if(asignados_h2[v]) { repetidos = true; break;}
         h2[i] = v;
+        asignados_h2[v] = 1;
     }
     
-    for(unsigned i = (2*t_subcadena) - 1; i < tam; i++) {
-        if(asignados_h1[p[i]]) {
-            v = precedente_h1[p[i]];
-        } else {
-            v = p[i];
+    if(!repetidos) {
+        for(unsigned i = (2*t_subcadena) - 1; i < tam; i++) {
+            if(asignados_h1[p[i]]) {
+                v = precedente_h1[p[i]];
+            } else {
+                v = p[i];
+            }
+            
+            if(asignados_h1[v]){ repetidos = true; break; }
+            h1[i] = v;
+            asignados_h1[v] = 1;
+            
+            if(asignados_h2[m[i]]) {
+                v = precedente_h2[m[i]];
+            } else {
+                v = m[i];
+            }
+            
+            if(asignados_h2[v]){ repetidos = true; break; }
+            h2[i] = v;
+            asignados_h2[v] = 1;
         }
-        
-        h1[i] = v;
-        
-        if(asignados_h2[m[i]]) {
-            v = precedente_h2[m[i]];
-        } else {
-            v = m[i];
-        }
-        
-        h2[i] = v;
+    }
+    
+    if(repetidos) {
+        generarSolucion(h1);
+        generarSolucion(h2);
     }
     
     delete [] asignados_h1;
